@@ -1,9 +1,9 @@
-[submodule "GraphGPS"]
-	path = GraphGPS
-	url = https://github.com/rampasek/GraphGPS.git
 [submodule "graph-token"]
 	path = graph-token
 	url = https://github.com/alip67/graph-token.git
 [submodule "AutoGraph"]
 	path = AutoGraph
 	url = https://github.com/BorgwardtLab/AutoGraph.git
+[submodule "GraphGPS"]
+	path = GraphGPS
+	url = git@github.com:MinghanWu039/GraphGPS.git
