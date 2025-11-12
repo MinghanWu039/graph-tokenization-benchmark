@@ -1,7 +1,10 @@
 #!/usr/bin/env python3
 """
 Extract labels from all algorithm subdirectories within a task directory.
-Usage: python batch_label_extractor.py /path/to/tasks/cycle_check output_dir
+Usage: python batch_label_extractor.py /path/to/tasks/cycle_check output_dir --split train
+Examples:
+    /tasks/cycle_check/ba/train
+    /tasks/cycle_check/ba/test
 """
 
 import json
@@ -87,13 +90,14 @@ def process_algorithm_directory(alg_dir, alg_name):
     return results
 
 
-def process_task_directory(task_dir, output_dir):
+def process_task_directory(task_dir, output_dir, split='train'):
     """
     Process all algorithm subdirectories within a task directory.
     
     Args:
         task_dir (str): Path to task directory (e.g., /tasks/cycle_check)
         output_dir (str): Directory to save individual algorithm label files
+        split (str): Which split to process under each algorithm (e.g., 'train' or 'test')
     """
     task_path = Path(task_dir)
     output_path = Path(output_dir)
@@ -105,17 +109,18 @@ def process_task_directory(task_dir, output_dir):
     # Create output directory
     output_path.mkdir(parents=True, exist_ok=True)
     
-    # Find algorithm subdirectories
+    # Find algorithm subdirectories (look for the requested split under each algorithm)
     alg_dirs = []
     for item in task_path.iterdir():
         if item.is_dir():
-            # Look for train subdirectory
-            train_dir = item / "train"
-            if train_dir.exists() and train_dir.is_dir():
-                alg_dirs.append((item.name, train_dir))
+            # Look for specified split subdirectory (train or test)
+            split_dir = item / split
+            print(f"Looking for split directory: {split_dir}")
+            if split_dir.exists() and split_dir.is_dir():
+                alg_dirs.append((item.name, split_dir))
     
     if not alg_dirs:
-        print(f"No algorithm directories with 'train' subdirectories found in {task_dir}")
+        print(f"No algorithm directories with '{split}' subdirectories found in {task_dir}")
         sys.exit(1)
     
     print(f"Found {len(alg_dirs)} algorithm directories:")
@@ -124,14 +129,14 @@ def process_task_directory(task_dir, output_dir):
     
     # Process each algorithm
     total_results = 0
-    for alg_name, train_dir in sorted(alg_dirs):
-        print(f"\nProcessing algorithm: {alg_name}")
+    for alg_name, split_dir in sorted(alg_dirs):
+        print(f"\nProcessing algorithm: {alg_name} (split: {split})")
         
         # Process this algorithm's files
-        results = process_algorithm_directory(train_dir, alg_name)
+        results = process_algorithm_directory(split_dir, alg_name)
         
         if results:
-            # Save results for this algorithm
+            # Save results for this algorithm (include split in filename)
             output_file = output_path / f"{alg_name}.txt"
             with open(output_file, 'w') as f:
                 for graph_id, label in results:
@@ -159,10 +164,11 @@ def main():
     parser = argparse.ArgumentParser(description='Extract labels from all algorithms in a task directory')
     parser.add_argument('task_dir', help='Task directory path (e.g., /path/to/tasks/cycle_check)')
     parser.add_argument('output_dir', help='Output directory for algorithm label files')
+    parser.add_argument('--split', choices=['train', 'test'], default='train', help="Which split to process under each algorithm (default: train)")
     
     args = parser.parse_args()
     
-    process_task_directory(args.task_dir, args.output_dir)
+    process_task_directory(args.task_dir, args.output_dir, args.split)
 
 
 if __name__ == "__main__":
