@@ -373,7 +373,7 @@ def main():
     parser.add_argument('--alg-name', help='Algorithm name override')
     parser.add_argument('--batch', action='store_true', 
                        help='Batch process all files into a single output file')
-    parser.add_argument('--sequences-dir', default='graph_token_sequences',
+    parser.add_argument('--sequences-dir', default='autograph_sequences',
                        help='Directory containing sequence files (for batch mode)')
     parser.add_argument('--labels-dir', default='cycle_check_labels',
                        help='Directory containing label files (for batch mode)')
