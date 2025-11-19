@@ -1,6 +1,7 @@
 [submodule "graph-token"]
 	path = graph-token
 	url = https://github.com/alip67/graph-token.git
+	ignore = all
 [submodule "AutoGraph"]
 	path = AutoGraph
 	url = https://github.com/BorgwardtLab/AutoGraph.git
