@@ -1,6 +1,6 @@
 autograph_sequences
 graph_token_outputs
-data
+autograph_data
 .vscode
 wandb
 __pycache__/
