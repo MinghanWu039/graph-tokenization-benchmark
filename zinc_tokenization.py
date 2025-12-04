@@ -225,7 +225,7 @@ def parse_args() -> argparse.Namespace:
         "--root",
         type=Path,
         default=default_root,
-        help="Directory where PyG should cache ZINC (default: GraphGPS/data/zinc).",
+        help="Directory where PyG should cache ZINC (default: GraphGPS/datasets/ZINC).",
     )
     parser.add_argument(
         "--subset",
