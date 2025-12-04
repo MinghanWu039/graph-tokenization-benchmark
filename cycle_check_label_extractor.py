@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 Extract labels from all algorithm subdirectories within a task directory.
-Usage: python batch_label_extractor.py /path/to/tasks/cycle_check output_dir --split train
+Usage: python cycle_check_label_extractor.py /path/to/tasks/cycle_check output_dir --split train
 Examples:
     /tasks/cycle_check/ba/train
     /tasks/cycle_check/ba/test
