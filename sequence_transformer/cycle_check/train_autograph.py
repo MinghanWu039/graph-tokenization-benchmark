@@ -2,6 +2,7 @@
 """Train CycleCheckTransformer on AutographDataset token sequences."""
 
 import argparse
+from pathlib import Path
 import random
 import time
 from typing import Dict, Tuple
@@ -114,8 +115,7 @@ def compute_vocab_size(dataset: Dataset) -> int:
 
 def parse_args() -> argparse.Namespace:
 	parser = argparse.ArgumentParser(description="Train transformer on AutographDataset.")
-	parser.add_argument("--train-file", type=str, required=True, help="Path to the train txt file.")
-	parser.add_argument("--test-file", type=str, help="Optional path to test txt file.")
+	parser.add_argument("--data-root", type=str, help="Root directory containing dataset JSON files.")
 	parser.add_argument("--batch-size", type=int, default=32)
 	parser.add_argument("--epochs", type=int, default=10)
 	parser.add_argument("--lr", type=float, default=3e-4)
@@ -137,7 +137,7 @@ def parse_args() -> argparse.Namespace:
 	parser.add_argument("--device", type=str, default="cuda" if torch.cuda.is_available() else "cpu")
 	parser.add_argument("--seed", type=int, default=42)
 	parser.add_argument("--wandb", action="store_true", help="Enable Weights & Biases logging.")
-	parser.add_argument("--wandb-project", type=str, default="autograph-cycle-check")
+	parser.add_argument("--wandb-project", type=str, default="Cycle_Detection")
 	parser.add_argument("--wandb-entity", type=str, default=None)
 	parser.add_argument("--wandb-name", type=str, default=None)
 	return parser.parse_args()
@@ -154,14 +154,15 @@ def main() -> None:
 			import wandb as wandb_module
 		except ImportError as exc:
 			raise ImportError("wandb is not installed but --wandb was set") from exc
-
-	train_dataset = AutographDataset(args.train_file, max_len=args.max_len)
+		
+	data_root = Path(args.data_root)
+	train_dataset = AutographDataset(data_root / "train.txt", max_len=args.max_len)
 	if args.val_frac > 0.0:
 		train_subset, val_subset = split_dataset(train_dataset, args.val_frac, seed=args.seed)
 	else:
 		train_subset, val_subset = train_dataset, None
 
-	test_dataset = AutographDataset(args.test_file, max_len=args.max_len) if args.test_file else None
+	test_dataset = AutographDataset(data_root / "test.txt", max_len=args.max_len)
 
 	vocab_size = compute_vocab_size(train_dataset)
 	print(f"Vocabulary size (max token id + 1): {vocab_size}")

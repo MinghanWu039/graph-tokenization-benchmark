@@ -177,7 +177,7 @@ def parse_args() -> argparse.Namespace:
 	parser.add_argument("--device", type=str, default="cuda" if torch.cuda.is_available() else "cpu")
 	parser.add_argument("--seed", type=int, default=42)
 	parser.add_argument("--wandb", action="store_true", help="Enable Weights & Biases logging.")
-	parser.add_argument("--wandb-project", type=str, default="graph-token-cycle-check")
+	parser.add_argument("--wandb-project", type=str, default="Cycle_Detection")
 	parser.add_argument("--wandb-entity", type=str, default=None)
 	parser.add_argument("--wandb-name", type=str, default=None)
 	return parser.parse_args()
