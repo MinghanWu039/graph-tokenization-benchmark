@@ -219,7 +219,7 @@ def build_tokenizer(args, repo_root: Path) -> Tuple[Callable[[Data], TokenList],
 
 def parse_args() -> argparse.Namespace:
     repo_root = Path(__file__).resolve().parent
-    default_root = repo_root / "GraphGPS" / "data" / "zinc"
+    default_root = repo_root / "GraphGPS" / "datasets" / "ZINC"
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument(
         "--root",
